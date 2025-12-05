@@ -50,8 +50,8 @@ The server accepted the tampered UserId and created the feedback as User 21.
 
 ## 6. Evidence
 Screenshots included in the `screenshots/` folder:
-- `.png` → original request
-- `after.png` → tampered request
+- `original request.png` → original request
+- `Modified req&res.png` → tampered request
 
 ---
 
